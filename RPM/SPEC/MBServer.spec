@@ -51,6 +51,7 @@ cd .%{install_dir}/bin
 rm -rf libwebp
 rm -rf MediaInfo
 rm -rf sqlite3
+rm -rf ./*.dylib
 echo  "<configuration><dllmap dll=\"libwebp\" target=\"libwebp.so\" os=\"linux\"/></configuration>" > Imazen.WebP.dll.config
 echo  "<configuration><dllmap dll=\"sqlite3\" target=\"libsqlite3.so.0.8.6\" os=\"linux\"/></configuration>" > System.Data.SQLite.dll.config
 
