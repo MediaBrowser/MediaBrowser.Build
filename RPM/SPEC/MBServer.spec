@@ -3,7 +3,6 @@
 %global release Stable
 %global data_dir /var/opt/MediaBrowser/MediaBrowserServer
 %global install_dir /opt/MediaBrowser/MediaBrowserServer
-%global 
 
 Name:           %{name}
 Version:        %{version}
