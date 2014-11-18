@@ -1,0 +1,13 @@
+[Unit]
+Description=MediaBrowser Server Mono
+After=network.target
+
+[Service]
+ExecStart=/opt/MediaBrowser/MediaBrowserServer/start.sh
+User=MediaBrowserServer
+UMask = 0002
+Restart = on-abort
+TimeoutSec=300
+
+[Install]
+WantedBy=multi-user.target
