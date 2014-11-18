@@ -27,7 +27,6 @@ else
     mono_path="/opt/mono"
 fi
 if [ "$mono_path" != "" ]; then
-    export $mono_path
     export PATH=$mono_path/bin:$PATH
     export LD_LIBRARY_PATH=$mono_path/lib:$LD_LIBRARY_PATH
     export PKG_CONFIG_PATH=$mono_path/lib/pkgconfig:$PKG_CONFIG_PATH
