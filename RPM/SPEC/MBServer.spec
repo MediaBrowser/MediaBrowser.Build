@@ -3,11 +3,15 @@
 %global release Stable
 %global data_dir /var/opt/MediaBrowser/MediaBrowserServer
 %global install_dir /opt/MediaBrowser/MediaBrowserServer
-
+%global 
 
 Name:           %{name}
 Version:        %{version}
+%if "%(echo $USER)" == "abuild"
 Release:        %{release}.<CI_CNT>.<B_CNT>
+%else
+Release:        %{release}
+%endif
 Summary:        Media Browser Server is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.
 Vendor:         Media Browser
 Group:          Applications/Multimedia
@@ -17,7 +21,7 @@ URL:            http://mediabrowser.tv/
 Source0:        https://github.com/MediaBrowser/MediaBrowser/archive/%{version}.tar.gz
 Source1:        root.tar.bz2
 AutoReqProv: no
-BuildRequires: mono-devel> 3.2.7
+BuildRequires: mono-devel > 3.2.7
 Requires: mono-devel > 3.2.7, libgdiplus > 3.0.0, libmediainfo, libwebp >= 0.4.1, sqlite >= 3.8.2	
 %global debug_package %{nil}
 
@@ -28,21 +32,28 @@ It features a REST-based api with built-in documention to facilitate client deve
 
 %setup -n MediaBrowser-%{version} -q
 mkdir -p src; find -maxdepth 1 -mindepth 1 -not -name src -exec mv '{}' src \;
-%setup -n MediaBrowser-%{version} -q -T -D -a 1 
+%setup -c -n MediaBrowser-%{version} -q -T -D -a 1 
 mv root/* ./
 rm -r root
 
 %build
 
-%{buildroot}%{install_dir}/helpers/check_mono.sh
-$buildLogs="/opt/MediaBrowser/MediaBrowserServer/bin/buildLogs.txt"
+. .%{install_dir}/helpers/check_mono.sh
+echo $mono_path
+buildLogs="%{install_dir}/bin/buildLogs.txt"
 cd src/
-mkdir -p ../opt/MediaBrowser/MediaBrowserServer/bin
+mkdir -p ..%{install_dir}/bin
 $mono_path/bin/xbuild /p:Configuration="Release Mono" /p:Platform="Any CPU" /t:clean MediaBrowser.Mono.sln > ..$buildLogs
-$mono_path/bin/xbuild /p:Configuration="Release Mono" /p:Platform="Any CPU" /t:build MediaBrowser.Mono.sln >> ....$buildLogs
-mv MediaBrowser.Server.Mono/bin/Release\ Mono/* ../opt/MediaBrowser/MediaBrowserServer/bin
+$mono_path/bin/xbuild /p:Configuration="Release Mono" /p:Platform="Any CPU" /t:build MediaBrowser.Mono.sln >> ..$buildLogs
+mv MediaBrowser.Server.Mono/bin/Release\ Mono/* ..%{install_dir}/bin
 cd ..
-rm -rf src 
+rm -rf src
+cd .%{install_dir}/bin
+rm -rf libwebp
+rm -rf MediaInfo
+rm -rf sqlite3
+echo  "<configuration><dllmap dll=\"libwebp\" target=\"libwebp.so\" os=\"linux\"/></configuration>" > Imazen.WebP.dll.config
+echo  "<configuration><dllmap dll=\"sqlite3\" target=\"libsqlite3.so.0.8.6\" os=\"linux\"/></configuration>" > System.Data.SQLite.dll.config
 
 %pre
 
