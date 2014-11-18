@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application>
+  <id type="desktop">MediaBrowserServer.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <project_license>GPL-1.0+</project_license>
+  <summary>Media Server </summary>
+  <description>
+    <p>Media Browser Server is a home media server built on top of other popular open source technologies such as Service Stack, jQuery, jQuery mobile, and Mono.</p>
+    <p>It features a REST-based api with built-in documention to facilitate client development. We also have client libraries for our api to enable rapid development.</p>
+    <p>We have several client apps released and in production:</p>
+    	<ul>Android</ul> 
+  </description>
+  <url type="homepage">https://mediabrowser.tv</url>
+  <screenshots>
+    <screenshot type="default">https://camo.githubusercontent.com/575008c4b91769d5054e0e951c7eb97f3b8e550c/68747470733a2f2f7261772e6769746875622e636f6d2f4d6564696142726f777365722f4d6564696142726f777365722e5265736f75726365732f6d61737465722f617070732f6d6274312e706e67</screenshot>
+  </screenshots>
+  <updatecontact>someone_at_mediabrowser.tv</updatecontact>
+</application>

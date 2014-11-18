@@ -1,0 +1,20 @@
+Cmnd_Alias RESTARTSERVER = /usr/sbin/service MediaBrowserServer restart
+Cmnd_Alias STARTSERVER = /usr/sbin/service MediaBrowserServer start
+Cmnd_Alias STOPSERVER = /usr/sbin/service MediaBrowserServer stop
+
+#ALLOW tray icon to start/restart MediaBrowser service and host
+%wheel ALL=(ALL) NOPASSWD: RESTARTSERVER
+%wheel ALL=(ALL) NOPASSWD: STARTSERVER
+%wheel ALL=(ALL) NOPASSWD: STOPSERVER
+
+Defaults!RESTARTSERVER !requiretty
+Defaults!STARTSERVER !requiretty
+Defaults!STOPSERVER !requiretty
+
+#Allow the server to mount iso images
+MediaBrowserServer ALL=(root) NOPASSWD: /bin/mount
+MediaBrowserServer ALL=(root) NOPASSWD: /bin/umount
+
+Defaults:MediaBrowserServer !requiretty
+
+

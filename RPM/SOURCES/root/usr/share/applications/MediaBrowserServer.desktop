@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=3
+Name=Media Browser Server
+Comment=Server to manage and view your media 
+Exec=/opt/MediaBrowser/MediaBrowserServer/TrayIcon/TrayIcon.py
+Icon=MediaBrowserServer
+Type=Application
+Categories=Other;
+
+
+
+
