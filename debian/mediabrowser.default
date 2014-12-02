@@ -1,0 +1,24 @@
+# Defaults for mediabrowser initscript
+# sourced by /etc/init.d/mediabrowser
+# installed at /etc/default/mediabrowser by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+# Additional options that are passed to the Daemon.
+## MB_USER=         #$RUN_AS, username to run mediabrowser under, the default is mediabrowser
+## MB_HOME=         #$APP_PATH, the location of MediaBrowser.Server.Mono.exe, the default is /opt/mediabrowser
+## MB_DATA=         #$DATA_DIR, the location of MediaBrowser data, cache, logs, the default is /usr/lib/mediabrowser
+## MB_PIDFILE=      #$PID_FILE, the location of mediabrowser.pid, the default is /var/run/mediabrowser/mediabrowser.pid
+## MB_EXEC=         #$MB_EXEC, the name of the MediaBrowser Server exectuable, the default is MediaBrowser.Server.Mono.exe
+## MB_OPTS=         #$MB_OPTS, options passed to the MediaBrowserServer executable, the default is -programdata $MB_DATA, make MB_DATA inert
+## MONO_BIN=        #$MONO_BIN, the location oth mono binary, the default is /usr/bin/mono
+##
+## EXAMPLE if want to run as different user
+## add MB_USER=username to /etc/default/mediabrowser
+## otherwise default mediabrowser is used
+
+MB_USER="mediabrowser"
+MB_HOME="/opt/mediabrowser"
+MB_DATA="/var/lib/mediabrowser"
