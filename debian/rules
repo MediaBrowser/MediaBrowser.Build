@@ -1,0 +1,20 @@
+#! /usr/bin/make -f
+
+%:
+	dh $@ --with=cli
+
+override_dh_auto_build:
+	xbuild $(CURDIR)/MediaBrowser.Mono.sln /p:Configuration="Release Mono" /p:Platform="Any Cpu" /property:OutputPath='$(CURDIR)/opt/mediabrowser' /t:build
+
+override_dh_auto_clean:
+	sed -i -e 's%<dllmap dll="sqlite3" target="libsqlite3.so.0.8.6" os="linux" cpu="!x86,x86-64"/>%%' $(CURDIR)/MediaBrowser.Server.Mono/System.Data.SQLite.dll.config
+	sed -i -e 's%<dllmap dll="sqlite3" target="./sqlite3/linux/lib/libsqlite3.so.0.8.6" os="linux" wordsize="32"/>%%' $(CURDIR)/MediaBrowser.Server.Mono/System.Data.SQLite.dll.config
+	sed -i -e 's%<dllmap dll="sqlite3" target="./sqlite3/linux/lib64/libsqlite3.so.0.8.6" os="linux" wordsize="64"/>%<dllmap dll="sqlite3" target="libsqlite3.so.0" os="!windows"/>%' $(CURDIR)/MediaBrowser.Server.Mono/System.Data.SQLite.dll.config
+	xbuild $(CURDIR)/MediaBrowser.Mono.sln /p:Configuration="Release Mono" /p:Platform="Any Cpu" /t:clean
+
+override_dh_makeclilibs:
+	rm debian/mediabrowser/opt/mediabrowser/Mono.Posix.dll
+	dh_makeclilibs 
+
+override_dh_clideps:
+	dh_clideps --exclude-moduleref=i:libwebp --exclude-moduleref=i:ole32
