@@ -6,6 +6,7 @@ Build-Depends:	cli-common-dev (>= 0.7),
 		libmono-cil-dev,
 		mono-devel (>= 3.2.8),
 		mono-xbuild,
+		libsqlite3-dev (>= 3.7.2),
                 libmediainfo0 (>= 0.7.52),
 		libgdiplus
 Standards-Version: 3.9.4
