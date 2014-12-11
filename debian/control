@@ -9,6 +9,7 @@ Build-Depends:	cli-common-dev (>= 0.7),
 		libsqlite3-dev (>= 3.7.2),
                 libmediainfo0 (>= 0.7.52),
 		libgdiplus
+		libwebp-dev
 Standards-Version: 3.9.4
 
 Package: mediabrowser
