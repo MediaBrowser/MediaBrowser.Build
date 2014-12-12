@@ -8,7 +8,7 @@ Build-Depends:	cli-common-dev (>= 0.7),
 		mono-xbuild,
 		libsqlite3-dev (>= 3.7.2),
                 libmediainfo0 (>= 0.7.52),
-		libgdiplus
+		libgdiplus,
 		libwebp-dev
 Standards-Version: 3.9.4
 
