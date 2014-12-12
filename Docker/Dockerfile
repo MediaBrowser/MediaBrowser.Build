@@ -23,7 +23,7 @@ RUN apt-mark hold initscripts udev plymouth mountall;\
     echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90forceyes;\
     echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' > /etc/apt/sources.list;\
     echo 'deb http://archive.ubuntu.com/ubuntu trusty-updates  main universe restricted' >> /etc/apt/sources.list;\
-    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser-daily/ubuntu trusty main' >> /etc/apt/sources.list;\
+    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser/ubuntu trusty main' >> /etc/apt/sources.list;\
     apt-get update;\
     echo exit 101 > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d;\
     dpkg-divert --local --rename --add /sbin/initctl;\
