@@ -57,6 +57,7 @@ EXPOSE 8096/tcp
 EXPOSE 7359/udp
 # ssdp port for UPnP / DLNA discovery
 EXPOSE 1900/udp
+
 # Make start script executable and initiate container with start script.
 RUN chmod u+x  /start.sh
 ENTRYPOINT ["/start.sh"]
