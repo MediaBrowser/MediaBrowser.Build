@@ -21,9 +21,9 @@ RUN usermod -s /bin/bash nobody
 RUN apt-mark hold initscripts udev plymouth mountall;\
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 637D1286;\
     echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90forceyes;\
-    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser/ubuntu trusty main' >> /etc/apt/sources.list;\
     echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' > /etc/apt/sources.list;\
     echo 'deb http://archive.ubuntu.com/ubuntu trusty-updates  main universe restricted' >> /etc/apt/sources.list;\
+    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser-daily/ubuntu trusty main' >> /etc/apt/sources.list;\
     apt-get update;\
     echo exit 101 > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d;\
     dpkg-divert --local --rename --add /sbin/initctl;\
@@ -57,7 +57,6 @@ EXPOSE 8096/tcp
 EXPOSE 7359/udp
 # ssdp port for UPnP / DLNA discovery
 EXPOSE 1900/udp
-
 # Make start script executable and initiate container with start script.
 RUN chmod u+x  /start.sh
 ENTRYPOINT ["/start.sh"]
