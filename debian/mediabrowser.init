@@ -137,7 +137,7 @@ do_stop()
     TMPFILE=$(mktemp /tmp/mediabrowser.XXXXXXXXXX || exit 1)
     trap '[ -f $TMPFILE ] && rm -f $TMPFILE' EXIT
     echo "$PID" > $TMPFILE
-    start-stop-daemon --stop --quiet -user $USER --retry=TERM/30/KILL/5 --pidfile $TMPFILE
+    start-stop-daemon --stop --quiet --user $USER --retry=TERM/30/KILL/5 --pidfile $TMPFILE
     RETVAL="$?"
     [ "$RETVAL" = 2 ] && return 2
     # Many daemons don't delete their pidfiles when they exit.
