@@ -1,8 +1,8 @@
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          mediabrowser
-# Required-Start:    $network $local_fs
-# Required-Stop:
+# Required-Start:    $local_fs $network $remote_fs
+# Required-Stop:     $local_fs $network $remote_fs
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: starts instance of MediaBrowser Server
@@ -46,7 +46,7 @@ USER=${MB_USER-mediabrowser}
 PROGRAMDATA=${MB_DATA-/usr/lib/mediabrowser}
 
 # Path to store PID file
-PIDFILE=${MB_PIDFILE-/var/run/mediabrowser/mediabrowser.pid}
+PIDFILE=${MB_PIDFILE-/var/run/mediabrowser.pid}
 
 # Path to app MB_HOME=path_to_app_MediaBrowser.Server.Mono.exe
 DAEMON_PATH=${MB_HOME-/opt/mediabrowser}
@@ -79,18 +79,49 @@ PID_PATH=`dirname $PIDFILE`
 . /lib/lsb/init-functions
 
 #
+# Function that checks if the daemon/service is started
+#
+is_running()
+{
+        # returns 0 when running, 1 otherwise
+        PID="$(pgrep -f -x -u $USER "$DAEMON $DAEMON_ARGS.*")"
+        RET=$?
+        [ $RET -gt 1 ] && {
+                log_failure_msg "$DESC: fatal pgrep error ($RET), aborting";
+                exit 1; }
+        return $RET
+}
+
+#
+# Function that checks if the return value of the start stop  daemon/service
+#
+check_retval()
+{
+    case "$?" in
+        0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+        2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+    esac
+}
+
+#
 # Function that starts the daemon/service
 #
 do_start()
 {
-	# Return
-	#   0 if daemon has been started
-	#   1 if daemon was already running
-	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --make-pidfile --pidfile $PIDFILE \
+    # Return
+    #   0 if daemon has been started
+    #   1 if daemon was already running
+    #   2 if daemon could not be started
+    start-stop-daemon --start --quiet --make-pidfile --pidfile $PIDFILE \
         --background -d $DAEMON_PATH -c $USER \
         --exec $DAEMON -- $DAEMON_ARGS $DAEMON_OPTS > /dev/null \
-		|| return 2
+        || return 2
+    RETVAL="$?"
+    [ "$RETVAL" = 2 ] && return 2
+    # create a pidfile, not used but provided for monitoring apps
+    [ -w $PIDFILE ] && \
+        echo "$PID" > $PIDFILE
+    return "$RETVAL"
 }
 
 #
@@ -98,25 +129,20 @@ do_start()
 #
 do_stop()
 {
-	# Return
-	#   0 if daemon has been stopped
-	#   1 if daemon was already stopped
-	#   2 if daemon could not be stopped
-	#   other if a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE
-	RETVAL="$?"
-	[ "$RETVAL" = 2 ] && return 2
-	# Wait for children to finish too if this is a daemon that forks
-	# and if the daemon is only ever run from this initscript.
-	# If the above conditions are not satisfied then add some other code
-	# that waits for the process to drop all resources that could be
-	# needed by services started subsequently.  A last resort is to
-	# sleep for some time.
-	start-stop-daemon --stop --quiet --oknodo --retry=0/30/KILL/5 --exec $DAEMON
-	[ "$?" = 2 ] && return 2
-	# Many daemons don't delete their pidfiles when they exit.
-	rm -f $PIDFILE
-	return "$RETVAL"
+    # Return
+    #   0 if daemon has been stopped
+    #   1 if daemon was already stopped
+    #   2 if daemon could not be stopped
+    #   other if a failure occurred
+    TMPFILE=$(mktemp /tmp/mediabrowser.XXXXXXXXXX || exit 1)
+    trap '[ -f $TMPFILE ] && rm -f $TMPFILE' EXIT
+    echo "$PID" > $TMPFILE
+    start-stop-daemon --stop --quiet -user $USER --retry=TERM/30/KILL/5 --pidfile $TMPFILE
+    RETVAL="$?"
+    [ "$RETVAL" = 2 ] && return 2
+    # Many daemons don't delete their pidfiles when they exit.
+    [ -f $PIDFILE ] && rm -f $PIDFILE
+    return "$RETVAL"
 }
 
 # Create PID directory if not exist and ensure the mediabrowser user can write to it
@@ -139,47 +165,33 @@ if [ -e $PIDFILE ]; then
 fi
 
 case "$1" in
-  start)
-    [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC " "$NAME"
-    do_start
-    case "$?" in
-		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
-	esac
-  ;;
-  stop)
-	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
-	do_stop
-	case "$?" in
-		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
-		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
-	esac
-	;;
-  status)
+    start)
+        if ! is_running; then
+            [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC " "$NAME"
+            do_start
+            check_retval
+        else
+            log_success_msg "$DESC: already running (pid $PID)"
+        fi
+    ;;
+    stop)
+        if is_running; then
+            [ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+            do_stop
+            check_retval
+        else
+            log_success_msg "$DESC: not running"
+        fi
+    ;;
+    status)
        status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
-       ;;
-  restart|force-reload)
-	log_daemon_msg "Restarting $DESC" "$NAME"
-	do_stop
-	case "$?" in
-	  0|1)
-		do_start
-		case "$?" in
-			0) log_end_msg 0 ;;
-			1) log_end_msg 1 ;; # Old process is still running
-			*) log_end_msg 1 ;; # Failed to start
-		esac
-		;;
-	  *)
-	  	# Failed to stop
-		log_end_msg 1
-		;;
-	esac
-	;;
-  *)
-	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
-	exit 3
-	;;
+    ;;
+    restart|force-reload)
+        $0 stop || exit $?
+        $0 start || exit $?
+    ;;
+    *)
+        echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+        exit 3
+    ;;
 esac
-
-:
