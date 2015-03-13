@@ -24,9 +24,25 @@ Configuration files and state of MediaBrowser Server folder. (i.e. /opt/appdata/
 
 TimeZone. (i.e America/Edmonton)
 
+### `MB_USER_ID`
+
+User ID mediabrowser should run under, default is 99 for unRAID compatiability.
+
+### `MB_GROUP_ID`
+
+Group ID mediabrowser should run under, default is 100 for unRAID compatiability.
+
 ## Docker run command:
 
 ```
 docker run -d --net=host -v /*your_config_location*:/config -v /*your_media_location*:/media -e TZ=<TIMEZONE> --name=mbserver mediabrowser/mbserver
 
 ```
+
+## Other info:
+
+### Restarting mediabrowser
+
+```
+docker exec mbserver circusctl restart MediaBrowser
+```	
