@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "Setting up environment for MediaBrowser..."
+source /etc/mediabrowswer.conf
+
+usermod -u $USER_ID nobody
+usermod -g $GROUP_ID nobody
+usermod -s /bin/bash nobody
+
+chown -R nobody:nobody /opt/mediabrowser
+chown -R nobody:nobody /config

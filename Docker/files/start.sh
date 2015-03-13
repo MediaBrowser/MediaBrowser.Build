@@ -7,9 +7,10 @@ touch /config/clogs/MediaBrowser.log
 
 chmod 666 /config/clogs/*
 
-run-parts -v  --report /etc/setup.d
-
 envtpl /etc/circus.d/MediaBrowser.ini.tpl --allow-missing
+envtpl /etc/mediabrowser.conf.tpl --allow-missing
+
+run-parts -v  --report /etc/setup.d
 
 echo "---> Starting circus..."
 exec /usr/local/bin/circusd /etc/circus.ini
