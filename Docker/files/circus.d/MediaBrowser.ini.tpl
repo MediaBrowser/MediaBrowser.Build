@@ -2,8 +2,8 @@
 cmd = mono 
 args = MediaBrowser.Server.Mono.exe -programdata /config
 copy_env = True
-uid = {{ USER_ID | default(99) }}
-gid = {{ GROUP_ID | default(100) }}
+uid = {{ MB_USER_ID | default(99) }}
+gid = {{ MB_GROUP_ID | default(100) }}
 working_dir = /opt/mediabrowser
 autostart = true
 respawn = true
