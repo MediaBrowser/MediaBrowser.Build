@@ -53,6 +53,8 @@ ADD ./files/circus.d/MediaBrowser.ini.tpl /etc/circus.d/MediaBrowser.ini.tpl
 
 # Default MB3 HTTP/tcp server port
 EXPOSE 8096/tcp
+# Default MB3 HTTPS/tcp server port
+EXPOSE 8920/tcp
 # UDP server port
 EXPOSE 7359/udp
 # ssdp port for UPnP / DLNA discovery
