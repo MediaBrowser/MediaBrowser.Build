@@ -1,5 +1,5 @@
 # MediaBrowser Server
-FROM ubuntu:trusty
+FROM ubuntu:utopic
 MAINTAINER Carlos Hernandez <carlos@techbyte.ca>
 
 # Let the container know that there is no tty
@@ -30,7 +30,7 @@ RUN apt-mark hold initscripts udev plymouth mountall;\
     apt-get -y upgrade && apt-get clean
 
 # Install dependencies
-RUN apt-get install -qy --force-yes libmono-cil-dev Libgdiplus mediainfo wget libsqlite3-dev libc6-dev python-pip python-tornado python-zmq python-psutil imagemagick-6.q8 libmagickwand-6.q8-2\
+RUN apt-get install -qy --force-yes libmono-cil-dev mediainfo wget libsqlite3-dev libc6-dev python-pip python-tornado python-zmq python-psutil imagemagick-6.q8 libmagickwand-6.q8-2\
     && apt-get clean
 
 # Install and Configure Circus
@@ -54,6 +54,8 @@ ADD ./files/setup.d/mediabrowser.conf.tpl /etc/mediabrowser.conf.tpl
 
 # Default MB3 HTTP/tcp server port
 EXPOSE 8096/tcp
+# Default MB3 HTTPS/tcp server port
+EXPOSE 8920/tcp
 # UDP server port
 EXPOSE 7359/udp
 # ssdp port for UPnP / DLNA discovery
