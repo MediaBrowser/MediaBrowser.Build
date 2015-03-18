@@ -4,7 +4,8 @@ echo "Setting up environment for MediaBrowser..."
 source /etc/mediabrowser.conf
 
 usermod -u $USER_ID nobody
-usermod -g $GROUP_ID users
+groupmod -g $GROUP_ID users
+usermod -g $GROUP_ID nobody
 usermod -s /bin/bash nobody
 
 chown -R nobody:users /opt/mediabrowser

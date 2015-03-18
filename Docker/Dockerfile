@@ -30,7 +30,7 @@ RUN apt-mark hold initscripts udev plymouth mountall;\
     apt-get -y upgrade && apt-get clean
 
 # Install dependencies
-RUN apt-get install -qy --force-yes libmono-cil-dev Libgdiplus mediainfo wget libsqlite3-dev libc6-dev python-pip python-tornado python-zmq python-psutil imagemagick-6.q8 libmagickwand-6.q8-2\
+RUN apt-get install -qy --force-yes libmono-cil-dev mediainfo wget libsqlite3-dev libc6-dev python-pip python-tornado python-zmq python-psutil imagemagick-6.q8 libmagickwand-6.q8-2\
     && apt-get clean
 
 # Install and Configure Circus
