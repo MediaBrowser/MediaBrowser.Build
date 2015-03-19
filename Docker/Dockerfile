@@ -1,5 +1,5 @@
 # MediaBrowser Server
-FROM ubuntu:trusty
+FROM ubuntu:utopic
 MAINTAINER Carlos Hernandez <carlos@techbyte.ca>
 
 # Let the container know that there is no tty
@@ -12,18 +12,17 @@ RUN locale-gen en_US en_US.UTF-8
 RUN update-locale LANG=en_US.UTF-8
 RUN dpkg-reconfigure locales
 
-# Set user nobody to uid and gid of unRAID, uncomment for unRAID
-RUN usermod -u 99 nobody
-RUN usermod -g 100 nobody
-RUN usermod -s /bin/bash nobody
-
 # Update ubuntu
 RUN apt-mark hold initscripts udev plymouth mountall;\
     apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 637D1286;\
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF;\
     echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90forceyes;\
-    echo 'deb http://archive.ubuntu.com/ubuntu trusty main universe restricted' > /etc/apt/sources.list;\
-    echo 'deb http://archive.ubuntu.com/ubuntu trusty-updates  main universe restricted' >> /etc/apt/sources.list;\
-    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser/ubuntu trusty main' >> /etc/apt/sources.list;\
+    echo 'deb http://archive.ubuntu.com/ubuntu utopic main universe restricted' > /etc/apt/sources.list;\
+    echo 'deb http://archive.ubuntu.com/ubuntu utopic-updates  main universe restricted' >> /etc/apt/sources.list;\
+    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser-daily/ubuntu utopic main' >> /etc/apt/sources.list;\
+# Add mono 3.10
+    echo "deb http://download.mono-project.com/repo/debian wheezy/snapshots/3.10.0 main" >> /etc/apt/sources.list;\
+    echo 'deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main' >> /etc/apt/sources.list;\
     apt-get update;\
     echo exit 101 > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d;\
     dpkg-divert --local --rename --add /sbin/initctl;\
@@ -31,7 +30,7 @@ RUN apt-mark hold initscripts udev plymouth mountall;\
     apt-get -y upgrade && apt-get clean
 
 # Install dependencies
-RUN apt-get install -qy --force-yes libmono-cil-dev Libgdiplus mediainfo libwebp-dev wget libsqlite3-dev python-pip python-tornado python-zmq python-psutil\
+RUN apt-get install -qy --force-yes libmono-cil-dev mediainfo wget libsqlite3-dev libc6-dev python-pip python-tornado python-zmq python-psutil imagemagick-6.q8 libmagickwand-6.q8-2\
     && apt-get clean
 
 # Install and Configure Circus
@@ -50,6 +49,8 @@ VOLUME /config
 ADD ./files/circus.ini /etc/circus.ini
 ADD ./files/start.sh /start.sh
 ADD ./files/circus.d/MediaBrowser.ini.tpl /etc/circus.d/MediaBrowser.ini.tpl
+ADD ./files/setup.d/mediabrowser /etc/setup.d/mediabrowser
+ADD ./files/setup.d/mediabrowser.conf.tpl /etc/mediabrowser.conf.tpl
 
 # Default MB3 HTTP/tcp server port
 EXPOSE 8096/tcp
