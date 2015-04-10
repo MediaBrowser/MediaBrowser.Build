@@ -19,7 +19,7 @@ RUN apt-mark hold initscripts udev plymouth mountall;\
     echo 'APT::Get::Assume-Yes "true";' > /etc/apt/apt.conf.d/90forceyes;\
     echo 'deb http://archive.ubuntu.com/ubuntu utopic main universe restricted' > /etc/apt/sources.list;\
     echo 'deb http://archive.ubuntu.com/ubuntu utopic-updates  main universe restricted' >> /etc/apt/sources.list;\
-    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser-daily/ubuntu utopic main' >> /etc/apt/sources.list;\
+    echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser/ubuntu utopic main' >> /etc/apt/sources.list;\
 # Add mono 3.10
     echo "deb http://download.mono-project.com/repo/debian wheezy/snapshots/3.10.0 main" >> /etc/apt/sources.list;\
     echo 'deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main' >> /etc/apt/sources.list;\
