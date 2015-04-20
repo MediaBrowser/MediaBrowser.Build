@@ -58,7 +58,7 @@ chmod -R +x /etc/service/ /etc/my_init.d/
 # Repositories
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 637D1286 
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF 
-echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser-daily/ubuntu trusty main' > /etc/apt/sources.list.d/mediabrowser.list 
+echo 'deb http://ppa.launchpad.net/apps-z/mediabrowser/ubuntu trusty main' > /etc/apt/sources.list.d/mediabrowser.list 
 echo 'deb http://download.mono-project.com/repo/debian wheezy/snapshots/3.10.0 main' > /etc/apt/sources.list.d/mono.list 
 echo 'deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main' >> /etc/apt/sources.list.d/mono.list
 echo 'deb http://us.archive.ubuntu.com/ubuntu/ trusty main universe multiverse restricted' > /etc/apt/sources.list
