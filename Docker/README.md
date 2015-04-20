@@ -44,5 +44,5 @@ docker run -d --net=host -v /*your_config_location*:/config -v /*your_media_loca
 ### Restarting mediabrowser
 
 ```
-docker exec mbserver circusctl restart MediaBrowser
+docker exec mbserver sv restart emby
 ```	
